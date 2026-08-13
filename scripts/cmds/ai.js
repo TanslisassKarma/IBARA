@@ -20,7 +20,7 @@ module.exports = {
 
     try {
       // Exemple avec une API gratuite (HuggingFace)
-      const res = await axios.post("https://api-inference.huggingface.co/models/google/flan-t5-small", {
+      const res = await axios.post("https://delfaapiai.vercel.app/ai/chatgptfree?prompt=salut+comment+vas+-+tu%3F&model=chatgpt4", {
         inputs: question
       }, {
         headers: { Authorization: "Bearer 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" }
