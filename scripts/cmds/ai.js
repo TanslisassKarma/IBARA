@@ -20,7 +20,7 @@ module.exports = {
 
     try {
       // Exemple avec une API gratuite (HuggingFace)
-      const res = await axios.post("https://api-inference.huggingface.co/models/gpt2", {
+      const res = await axios.post("https://api-inference.huggingface.co/models/google/flan-t5-small", {
         inputs: question
       }, {
         headers: { Authorization: "Bearer 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" }
