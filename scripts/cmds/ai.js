@@ -19,7 +19,7 @@ module.exports = {
     if (!question) return api.sendMessage("⚠️ Pose-moi une question.", event.threadID, event.messageID);
 
     try {
-      const res = await axios.post("https://delfaapiai.vercel.app/ai/chatgptfree", {
+      const res = await axios.post("https://delfaapiai.vercel.app/ai/chatgptfree?prompt=peut+tu+compter+jusqu%27a+100%3F&model=chatgpt3", {
         prompt: question
       });
 
