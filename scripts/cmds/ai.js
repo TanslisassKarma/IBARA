@@ -24,8 +24,7 @@ module.exports = {
       !question
     ) {
       return api.sendMessage(
-        "꧁Karma.GPT꧂
-        Quoi??😾😾",
+        "🤖Karma.GPT🤖 ===> Quoi??😾😾",
         event.threadID,
         event.messageID
       );
@@ -39,7 +38,7 @@ module.exports = {
       );
     }
 
-    const message = await api.sendMessage("⏳ ꧁Karma.GPT꧂   réfléchis....", event.threadID);
+    const message = await api.sendMessage(" 🤖Karma.GPT🤖 ⏳Je réfléchis....", event.threadID);
 
     try {
       const url =
@@ -62,7 +61,7 @@ module.exports = {
       // Enregistre le contexte
       global.aiContext = { lastQuestion: question, lastAnswer: answer };
 
-      return api.editMessage(`         🤖꧁Karma.GPT꧂        ${answer}`, message.messageID, (err, info) => {
+      return api.editMessage(`   🤖Karma.GPT🤖  ${answer}`, message.messageID, (err, info) => {
         if (!err) {
           global.client.handleReply.push({
             name: this.config.name,
@@ -93,7 +92,7 @@ module.exports = {
       );
     }
 
-    const message = await api.sendMessage("⏳ ꧁Karma.GPT꧂   réfléchis...", event.threadID);
+    const message = await api.sendMessage(" 🤖Karma.GPT🤖 ⏳Je réfléchis...", event.threadID);
 
     try {
       let prompt = question;
@@ -124,7 +123,7 @@ module.exports = {
 
       global.aiContext = { lastQuestion: question, lastAnswer: answer };
 
-      return api.editMessage(`         🤖꧁Karma.GPT꧂         ${answer}`, message.messageID);
+      return api.editMessage(`     🤖Karma.GPT🤖     ${answer}`, message.messageID);
     } catch (error) {
       console.error(error);
       return api.editMessage(
