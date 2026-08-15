@@ -3,7 +3,7 @@ const axios = require("axios");
 module.exports = {
   config: {
     name: "ai",
-    version: "2.1",
+    version: "2.2",
     author: "ʚɸɞ Tānslīsãss Kãrmä ʚɸɞ",
     countDown: 5,
     role: 0,
@@ -15,17 +15,30 @@ module.exports = {
 
   // Commande directe
   onStart: async function ({ api, event, args }) {
-    const question = args.join(" ").trim();
+    let question = args.join(" ").trim();
 
-    if (!question) {
+    // Si l'utilisateur tape seulement "ai" ou "AI"
+    if (
+      event.body &&
+      event.body.toLowerCase().trim() === "ai" &&
+      !question
+    ) {
       return api.sendMessage(
-        "❌ Utilisation : ai <ta question> et parle vite j'ai pas toute la journée😾",
+        "꧁Karma.GPT꧂😾😾   Quoi???",
         event.threadID,
         event.messageID
       );
     }
 
-    const message = await api.sendMessage("⏳ Je réfléchis...", event.threadID);
+    if (!question) {
+      return api.sendMessage(
+        "❌ Utilisation : ai <ta question>",
+        event.threadID,
+        event.messageID
+      );
+    }
+
+    const message = await api.sendMessage("⏳ ꧁Karma.GPT꧂   réfléchis....", event.threadID);
 
     try {
       const url =
@@ -45,12 +58,11 @@ module.exports = {
 
       if (!answer) throw new Error("Réponse invalide de l'API");
 
-      // On enregistre le contexte pour les réponses suivantes
+      // Enregistre le contexte
       global.aiContext = { lastQuestion: question, lastAnswer: answer };
 
-      return api.editMessage(`🤖 ${answer}`, message.messageID, (err, info) => {
+      return api.editMessage(`         🤖꧁Karma.GPT꧂        ${answer}`, message.messageID, (err, info) => {
         if (!err) {
-          // On attache un handler onReply
           global.client.handleReply.push({
             name: this.config.name,
             messageID: info.messageID,
@@ -80,10 +92,9 @@ module.exports = {
       );
     }
 
-    const message = await api.sendMessage("⏳ Je réfléchis...", event.threadID);
+    const message = await api.sendMessage("⏳ ꧁Karma.GPT꧂   réfléchis...", event.threadID);
 
     try {
-      // On ajoute le contexte précédent si disponible
       let prompt = question;
       if (global.aiContext && global.aiContext.lastAnswer) {
         prompt =
@@ -110,10 +121,9 @@ module.exports = {
 
       if (!answer) throw new Error("Réponse invalide de l'API");
 
-      // Mise à jour du contexte
       global.aiContext = { lastQuestion: question, lastAnswer: answer };
 
-      return api.editMessage(`🤖 ${answer}`, message.messageID);
+      return api.editMessage(`         🤖꧁Karma.GPT꧂         ${answer}`, message.messageID);
     } catch (error) {
       console.error(error);
       return api.editMessage(
