@@ -24,7 +24,8 @@ module.exports = {
       !question
     ) {
       return api.sendMessage(
-        "꧁Karma.GPT꧂😾😾   Quoi???",
+        "꧁Karma.GPT꧂
+        Quoi??😾😾",
         event.threadID,
         event.messageID
       );
