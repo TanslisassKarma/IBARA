@@ -3,31 +3,66 @@ const axios = require("axios");
 module.exports = {
   config: {
     name: "ai",
-    aliases: ["ask"],
     version: "1.0",
     author: "ʚɸɞ Tānslīsãss Kãrmä ʚɸɞ",
     countDown: 5,
     role: 0,
-    shortDescription: "Répond aux questions",
-    longDescription: "Utilise Delfa API ChatGPTFree pour répondre",
-    category: "AI",
+    shortDescription: "Pose une question à l'IA",
+    longDescription: "Discute avec une intelligence artificielle",
+    category: "ai",
     guide: "{pn} <question>"
   },
 
   onStart: async function ({ api, event, args }) {
-    const question = args.join(" ");
-    if (!question) return api.sendMessage("⚠️ Pose-moi une question.", event.threadID, event.messageID);
+    const question = args.join(" ").trim();
+
+    if (!question) {
+      return api.sendMessage(
+        "❌ Utilisation : ai <ta question>",
+        event.threadID,
+        event.messageID
+      );
+    }
+
+    const message = await api.sendMessage(
+      "⏳ Je réfléchis...",
+      event.threadID
+    );
 
     try {
-      const res = await axios.post("https://delfaapiai.vercel.app/ai/chatgptfree?prompt=peut+tu+compter+jusqu%27a+100%3F&model=chatgpt3", {
-        prompt: question
+      const url =
+        "https://delfaapiai.vercel.app/ai/chatgptfree?prompt=" +
+        encodeURIComponent(question);
+
+      const response = await axios.get(url, {
+        timeout: 30000
       });
 
-      const answer = res.data?.response || "Je n’ai pas trouvé de réponse.";
-      api.sendMessage(answer, event.threadID, event.messageID);
-    } catch (err) {
-      api.sendMessage("❌ Erreur lors de la requête AI.", event.threadID, event.messageID);
-      console.error(err.response?.data || err.message);
+      const data = response.data;
+
+      const answer =
+        data.response ||
+        data.answer ||
+        data.message ||
+        data.result ||
+        data.text ||
+        (typeof data === "string" ? data : null);
+
+      if (!answer) {
+        throw new Error("Réponse invalide de l'API");
+      }
+
+      return api.editMessage(
+        `🤖 ${answer}`,
+        message.messageID
+      );
+    } catch (error) {
+      console.error(error);
+
+      return api.editMessage(
+        "❌ Impossible de contacter l'API pour le moment.",
+        message.messageID
+      );
     }
   }
 };
